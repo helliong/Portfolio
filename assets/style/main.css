@@ -1,3 +1,5 @@
+
+
 .intro {
     position: relative;
     width: 100%;
@@ -8,10 +10,13 @@
     align-items: center;
 
     font-family: "Noto Sans Mono", monospace;
-
     overflow: hidden;
-
 }
+
+.intro.hidden {
+    display: none;
+}
+
 
 .intro::before {
     content: "";
@@ -20,7 +25,7 @@
     left: 50%;
     width: 100%;
     height: 100%;
-    background: radial-gradient(ellipse at center, #252230 0%, #121212 60%);
+    background: radial-gradient(ellipse at center, #252230 0%, #121212 50%);
     transform: translate(-50%, -50%) scale(1);
     z-index: -1;
     animation: pulseBackground 3s infinite alternate ease-in-out;
@@ -30,11 +35,15 @@
     0% {
         transform: translate(-50%, -50%) scale(1);
     }
+
     50% {
-        transform: translate(-50%, -50%) scale(1.2); /* увеличиваем */
+        transform: translate(-50%, -50%) scale(1.3);
+        /* увеличиваем */
     }
+
     100% {
-        transform: translate(-50%, -50%) scale(1); /* возвращаемся */
+        transform: translate(-50%, -50%) scale(1);
+        /* возвращаемся */
     }
 }
 
@@ -53,4 +62,87 @@
     font-weight: 100;
     font-size: 80px;
     font-style: normal;
+}
+
+/* TICKER BUILDING*/
+
+.tickerSmall {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 2vw;
+    font-weight: 800;
+    color: #c40c0c;
+    font-family: "Noto Sans Mono", monospace;
+}
+
+.tickerSmallWrapper {
+    display: flex;
+    width: max-content;
+    animation: tickerSmallAnim 15s linear infinite;
+}
+
+.tickerSmallContent {
+    display: flex;
+    gap: 4vw;
+    min-width: 100%;
+}
+
+.tickerSmallContent span {
+    text-shadow:
+        0 0 1px #fff,
+        0 0 1px #fff,
+        0 0 1px #fff;
+    animation: glowPulse 1s infinite alternate;
+}
+
+@keyframes glowPulse {
+    from {
+        text-shadow:
+            0 0 2px #fff,
+            0 0 4px #fff,
+            0 0 8px #fff;
+    }
+
+    to {
+        text-shadow:
+            0 0 4px #fff,
+            0 0 6px #fff,
+            0 0 10px #fff;
+    }
+}
+
+
+@keyframes tickerSmallAnim {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+@media (max-width: 768px) {
+    .tickerSmall {
+        font-size: 3vw;
+    }
+
+    .tickerSmallContent {
+        gap: 6vw;
+        animation-duration: 12s;
+    }
+}
+
+@media (max-width: 480px) {
+    .tickerSmall {
+        font-size: 4vw;
+    }
+
+    .tickerSmallContent {
+        gap: 8vw;
+        animation-duration: 15s;
+    }
 }
