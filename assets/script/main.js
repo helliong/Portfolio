@@ -98,7 +98,17 @@ setInterval(updateGreeting, 2000);
                         setTimeout(() => cycleCloud(el), i * 600 + rand(0, 500));
                 });
 
+                let authorEnabled = false;
+                if (author) {
+                        author.style.pointerEvents = 'none';
+                        setTimeout(() => {
+                                authorEnabled = true;
+                                author.style.pointerEvents = 'auto';
+                        }, 3000);
+                }
+
                 author.addEventListener('click', () => {
+                        if (!authorEnabled) return;
                         introActive = false;
                         clouds.forEach(el => el.style.opacity = 0);
                         intro.classList.add('leave');
