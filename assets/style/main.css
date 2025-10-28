@@ -44,12 +44,15 @@ body {
     cursor: pointer;
 }
 
+.author:hover {
+    font-size: 18px;
+}
+
 .intro #greetings {
     letter-spacing: 1px;
     font-weight: 100;
     font-size: 80px;
     font-style: normal;
-    
 }
 
 /* Background Clouds Intro */
@@ -132,3 +135,26 @@ body {
     align-items: center;
 }
 
+.hint {
+    position: absolute;
+    top: 10%;
+    right: 46%;
+    rotate: -10deg;
+
+    animation: pulseAndRotate 2s infinite ease-in-out;
+    transition: opacity 1s ease;
+}
+
+@keyframes pulseAndRotate {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(2deg);
+    }
+
+    50% {
+        opacity: 0.6;
+        transform: scale(1.2) rotate(-2deg);
+    }
+}
