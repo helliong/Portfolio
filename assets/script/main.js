@@ -12,10 +12,152 @@ function updateGreeting() {
 setInterval(updateGreeting, 2000);
 
 
-// document.addEventListener("DOMContentLoaded", () => {
-//     const intro = document.querySelector(".intro");
+window.addEventListener('load', () => {
+        const container = document.querySelector('.intro');
+        const clouds = [
+                document.querySelector('.first-cloud-intro'),
+                document.querySelector('.second-cloud-intro'),
+                document.querySelector('.thrid-cloud-intro')
+        ].filter(Boolean);
 
-//     setTimeout(() => {
-//         intro.classList.add("hidden");
-//     }, 19000);
-// });
+        if (!container || clouds.length === 0) return;
+
+        const pad = 50; // отступы от краёв, чтобы blur не срезался
+
+        function rand(min, max) {
+                return Math.random() * (max - min) + min;
+        }
+
+        function placeCloud(el) {
+                // Размеры контейнера и элемента
+                const cw = container.clientWidth;
+                const ch = container.clientHeight;
+
+                // Временно показать, чтобы корректно получить размеры
+                const prevOpacity = el.style.opacity;
+                el.style.opacity = 1;
+                el.style.right = 'auto'; // чтобы не конфликтовало с right у второго облака
+                // Если размеры не определяются, можно задать из стилей как fallback
+                const ew = el.offsetWidth || 200;
+                const eh = el.offsetHeight || 100;
+
+                // Диапазоны (учитываем паддинги и blur)
+                const maxX = Math.max(0, cw - ew - pad);
+                const maxY = Math.max(0, ch - eh - pad);
+
+                const x = rand(pad, maxX);
+                const y = rand(pad, maxY);
+
+                el.style.left = `${x}px`;
+                el.style.top  = `${y}px`;
+                el.style.opacity = prevOpacity;
+        }
+
+        function cycleCloud(el) {
+                // параметры цикла
+                const fadeDur = 3000; // должен совпадать с transition: opacity 2s
+                const visibleDur = rand(4000, 9000);
+                const idleDur = rand(1000, 3000);
+
+                // новая позиция → плавное появление
+                placeCloud(el);
+                requestAnimationFrame(() => {
+                        el.style.opacity = 1;
+                });
+
+                // подержать видимым → плавно скрыть → пауза → повторить
+                setTimeout(() => {
+                        el.style.opacity = 0;
+
+                        setTimeout(() => {
+                                setTimeout(() => cycleCloud(el), idleDur);
+                        }, fadeDur);
+                }, visibleDur);
+        }
+
+        // Старт в разнобой, чтобы не синхронно мигали
+        clouds.forEach((el, i) => {
+                setTimeout(() => cycleCloud(el), i * 700 + rand(0, 800));
+        });
+});
+
+// ---- анти-пересечения ----
+const BLUR_MARGIN = 50; // запас под blur: 40px + немного
+
+function getRect(el) {
+        const x = parseFloat(el.style.left) || 0;
+        const y = parseFloat(el.style.top) || 0;
+        const w = el.offsetWidth || 200;
+        const h = el.offsetHeight || 100;
+        return { x, y, w, h };
+}
+function expandRect(r, m) {
+        return { x: r.x - m, y: r.y - m, w: r.w + 2*m, h: r.h + 2*m };
+}
+function intersects(a, b) {
+        return !(a.x + a.w <= b.x || b.x + b.w <= a.x || a.y + a.h <= b.y || b.y + b.h <= a.y);
+}
+
+function placeCloudNoOverlap(el, others, container, pad = 20, maxAttempts = 50) {
+        const cw = container.clientWidth;
+        const ch = container.clientHeight;
+
+        // сброс правого якоря на случай .second-cloud-intro
+        el.style.right = 'auto';
+
+        // временно показываем для корректных размеров
+        const prevOpacity = el.style.opacity;
+        el.style.opacity = 0;
+        const ew = el.offsetWidth || 200;
+        const eh = el.offsetHeight || 100;
+
+        const maxX = Math.max(0, cw - ew - pad);
+        const maxY = Math.max(0, ch - eh - pad);
+
+        let best = { x: pad, y: pad }; // запасной вариант
+        for (let i = 0; i < maxAttempts; i++) {
+                const x = Math.random() * (maxX - pad) + pad;
+                const y = Math.random() * (maxY - pad) + pad;
+
+                const r = expandRect({ x, y, w: ew, h: eh }, BLUR_MARGIN);
+                const collide = others.some(o => intersects(r, expandRect(getRect(o), BLUR_MARGIN)));
+                if (!collide) {
+                        el.style.left = `${x}px`;
+                        el.style.top  = `${y}px`;
+                        el.style.opacity = prevOpacity;
+                        return;
+                }
+                best = { x, y };
+        }
+        // если не нашли свободное место — ставим последний кандидат
+        el.style.left = `${best.x}px`;
+        el.style.top  = `${best.y}px`;
+        el.style.opacity = prevOpacity;
+}
+
+// ---- в существующем коде цикла ПОДМЕНИТЕ вызов размещения ----
+// было:
+// placeCloud(el);
+
+// нужно:
+function cycleCloud(el) {
+        const container = document.querySelector('.intro');
+        const fadeDur = 2000;
+        const visibleDur = Math.random() * (9000 - 4000) + 4000;
+        const idleDur = Math.random() * (3000 - 1000) + 1000;
+
+        const others = Array.from(document.querySelectorAll('.first-cloud-intro, .second-cloud-intro, .thrid-cloud-intro'))
+                .filter(n => n !== el);
+
+        placeCloudNoOverlap(el, others, container);
+        requestAnimationFrame(() => {
+                el.style.opacity = 0.5; // ваша целевая прозрачность
+        });
+
+        setTimeout(() => {
+                el.style.opacity = 0;
+                setTimeout(() => {
+                        setTimeout(() => cycleCloud(el), idleDur);
+                }, fadeDur);
+        }, visibleDur);
+}
