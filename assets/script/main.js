@@ -107,15 +107,15 @@ setInterval(updateGreeting, 2000);
                         }, 3000);
                 }
 
-                author.addEventListener('click', () => {
-                        if (!authorEnabled) return;
-                        introActive = false;
-                        clouds.forEach(el => el.style.opacity = 0);
-                        intro.classList.add('leave');
-                        intro.addEventListener('transitionend', () => {
-                                intro.classList.add('hidden');
-                        }, { once: true });
-                });
+                // author.addEventListener('click', () => {
+                //         if (!authorEnabled) return;
+                //         introActive = false;
+                //         clouds.forEach(el => el.style.opacity = 0);
+                //         intro.classList.add('leave');
+                //         intro.addEventListener('transitionend', () => {
+                //                 intro.classList.add('hidden');
+                //         }, { once: true });
+                // });
         });
 })();
 
