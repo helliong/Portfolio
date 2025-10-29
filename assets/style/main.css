@@ -3,7 +3,8 @@ body {
     height: 100%;
     width: 100%;
     background-color: #181818;
-    overflow: hidden;
+    position: relative;
+    /* overflow: hidden; */
 }
 
 /* Intro */
@@ -155,7 +156,6 @@ body {
 
     position: relative;
     z-index: 1;
-    overflow: hidden;
 
     font-family: Noto Sans;
     background-color: #181818;
@@ -163,13 +163,21 @@ body {
     font-size: 50px;
 }
 
-
+.header {
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* вся высота видимой области */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* центрирует содержимое по вертикали */
+    position: relative;
+}
 
 .logoAndService {
     display: flex;
     justify-content: space-between;
 
-    
+
 }
 
 .service {
@@ -207,12 +215,12 @@ body {
     top: 50%;
     left: -6%;
     z-index: 10;
-  
+
     display: flex;
     gap: 55px;
-  
+
     transform-origin: top left;
-    transform: translateY(70vh) rotate(-90deg);
+    transform: translateY(75vh) rotate(-90deg);
 }
 
 .menu a {
@@ -221,7 +229,7 @@ body {
 }
 
 .menu-wrap {
-    position: relative; 
+    position: relative;
 }
 
 .lineHome {
@@ -292,10 +300,11 @@ body {
     position: absolute;
     top: 50%;
     right: -50%;
-  
+    z-index: 100;
+
     display: flex;
     gap: 55px;
-  
+
     transform-origin: top left;
     transform: translateY(75vh) rotate(-90deg);
 
@@ -308,27 +317,70 @@ body {
 
 .cloudOne {
     position: absolute;
-    top: 70%;
+    top: 65%;
     left: -15%;
-    width: 400px;
-    height: 190px;
-    rotate: 45deg;
-    inset: 0;
+    width: 550px;
+    height: 250px;
+    rotate: 160deg;
     overflow: hidden;
-    z-index: 0;
+    z-index: 10;
 
     background: #414141;
-
+    opacity: 50%;
     border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-
-    filter: blur(40px);
-
-    
+    filter: blur(45px);
 
 }
+
 .cloudTwo {
     position: absolute;
+
+    position: absolute;
+    top: 35%;
+    right: 20%;
+    width: 450px;
+    height: 190px;
+    rotate: 25deg;
+    overflow: hidden;
+    z-index: 10;
+
+    background: #414141;
+    opacity: 50%;
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    filter: blur(45px);
+
 }
+
 .cloudThree {
     position: absolute;
+}
+
+.projects-wrap {
+    margin-top: 25%;
+}
+
+.projects {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+}
+
+.projects-wrap .projects img {
+    justify-content: space-between;
+    width: 270px;
+    border-radius: 5px #fff solid;
+}
+
+.projects span {
+    display: flex;
+    position: relative;
+    right: 100px;
+    transform: translateY(-50%) rotate(-90deg);
+    font-size: 30px;
+    font-weight: 700;
+    margin-top: 140px;
+
+    white-space: nowrap;
 }
