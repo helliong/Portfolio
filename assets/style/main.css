@@ -356,14 +356,18 @@ body {
 }
 
 .projects-wrap {
-    margin-top: 25%;
+    /* margin-top: 25%; */
+    padding: 20% 0 25% 0;
+
+    overflow: hidden;
 }
 
-.projects {
+.projects-wrap .projects {
     display: flex;
+    position: relative;
     justify-content: space-between;
     align-items: center;
-    gap: 20px;
+    gap: 10px;
 
 }
 
@@ -371,9 +375,11 @@ body {
     justify-content: space-between;
     width: 270px;
     border-radius: 5px #fff solid;
+
+    gap: 50px;
 }
 
-.projects span {
+.projects .projectsTitle {
     display: flex;
     position: relative;
     right: 100px;
@@ -383,4 +389,14 @@ body {
     margin-top: 140px;
 
     white-space: nowrap;
+}
+ 
+.projects-wrap .projects .lineAmazingProjects {
+    position: absolute;
+    left: 80%;
+    top: 115%;
+    transform: translateY(-5px);
+    height: 4px;
+    width: 50px;
+    background-color: #fff;
 }
